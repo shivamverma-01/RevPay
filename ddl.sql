@@ -1,56 +1,54 @@
+-- Create the database if it does not exist
+CREATE DATABASE IF NOT EXISTS revpay_payments;
 
-Create the `revpay_payments` database if it is not present already
+-- Switch to the `revpay_payments` database
+USE revpay_payments;
 
-CREATE DATABASE IF NOT EXISTS revpay_payment;
-
-
-`users`: Manages user credentials and usernames.
-
+-- Create the `users` table
 CREATE TABLE `users` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_r43af9ap4edm43mmtq01oddj6` (`username`)
-) 
+ `id` BIGINT NOT NULL AUTO_INCREMENT,
+ `password` VARCHAR(255) NOT NULL,
+ `username` VARCHAR(255) NOT NULL,
+ PRIMARY KEY (`id`),
+ UNIQUE KEY `UK_r43af9ap4edm43mmtq01oddj6` (`username`)
+);
 
-
-`accounts`: Stores account details, balances, and transaction permissions.
-
+-- Create the `accounts` table
 CREATE TABLE `accounts` (
-  `account_id` bigint NOT NULL AUTO_INCREMENT,
-  `activation_status` enum('ACTIVE','INACTIVE') NOT NULL,
-  `balance` bigint NOT NULL,
-  `bank_account_number` bigint NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `credit_allowed` bit(1) NOT NULL,
-  `daily_withdrawal_limit` bigint NOT NULL,
-  `debit_allowed` bit(1) NOT NULL,
-  `ifsc_code` varchar(255) NOT NULL,
-  `last_modified_at` datetime(6) NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`account_id`),
-  UNIQUE KEY `UK_ga46kn8v5cjecivi5o4gw2mog` (`bank_account_number`)
-) 
+ `account_id` BIGINT NOT NULL AUTO_INCREMENT,
+ `activation_status` ENUM('ACTIVE','INACTIVE') NOT NULL,
+ `balance` BIGINT NOT NULL,
+ `bank_account_number` BIGINT NOT NULL,
+ `created_at` DATETIME(6) NOT NULL,
+ `credit_allowed` BIT(1) NOT NULL,
+ `daily_withdrawal_limit` BIGINT NOT NULL,
+ `debit_allowed` BIT(1) NOT NULL,
+ `ifsc_code` VARCHAR(255) NOT NULL,
+ `last_modified_at` DATETIME(6) NOT NULL,
+ `user_id` BIGINT NOT NULL,
+ PRIMARY KEY (`account_id`),
+ UNIQUE KEY `UK_ga46kn8v5cjecivi5o4gw2mog` (`bank_account_number`),
+ FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+);
 
-
-`transactions`: Logs financial transactions including amount and type.
-
+-- Create the `transactions` table
 CREATE TABLE `transactions` (
-  `transaction_id` bigint NOT NULL AUTO_INCREMENT,
-  `account_id` bigint NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `transaction_amount` bigint NOT NULL,
-  `transaction_type` varchar(255) NOT NULL,
-  PRIMARY KEY (`transaction_id`)
-)
+ `transaction_id` BIGINT NOT NULL AUTO_INCREMENT,
+ `account_id` BIGINT NOT NULL,
+ `created_at` DATETIME(6) NOT NULL,
+ `transaction_amount` BIGINT NOT NULL,
+ `transaction_type` VARCHAR(255) NOT NULL,
+ PRIMARY KEY (`transaction_id`),
+ FOREIGN KEY (`account_id`) REFERENCES `accounts`(`account_id`)
+);
 
-`transfers`: Records transfers between accounts with timestamps.
-
+-- Create the `transfers` table
 CREATE TABLE `transfers` (
-  `transfer_id` bigint NOT NULL AUTO_INCREMENT,
-  `beneficiary_transaction_id` bigint NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `sender_transaction_id` bigint NOT NULL,
-  PRIMARY KEY (`transfer_id`)
-)
+ `transfer_id` BIGINT NOT NULL AUTO_INCREMENT,
+ `beneficiary_transaction_id` BIGINT NOT NULL,
+ `created_at` DATETIME(6) NOT NULL,
+ `sender_transaction_id` BIGINT NOT NULL,
+ PRIMARY KEY (`transfer_id`),
+ FOREIGN KEY (`beneficiary_transaction_id`) REFERENCES `transactions`(`transaction_id`),
+ FOREIGN KEY (`sender_transaction_id`) REFERENCES `transactions`(`transaction_id`)
+);
