@@ -1,64 +1,59 @@
-
 RevPay Payment Gateway
 ======================
 
-Overview
---------
-
-RevPay is a payment gateway service for businesses to manage payments through REST APIs.
+RevPay is a RESTful payment gateway application designed for businesses to manage payments and financial transactions effectively. The project leverages Spring Boot for backend development, with MySQL for database management, and is fully containerized using Docker for seamless deployment.
 
 Features
 --------
 
-*   **Business Registration**
-*   **Account Management**
-    *   Create multiple accounts
-    *   Set activation status (ACTIVE/INACTIVE)
-    *   Control transaction types (CREDIT/DEBIT)
-    *   Set daily withdrawal limits
-*   **Transaction Handling**
-    *   Deposit and withdrawal transactions
-*   **Balance Inquiry**
+*   **Business Registration:** Register new businesses to use the payment gateway.
+*   **Account Management:** Manage multiple accounts per business, control transaction types, and set activation status.
+*   **Transaction Handling:** Enable deposits, withdrawals, and transfers.
+*   **Balance Inquiry:** Quickly check account balances.
 
 API Endpoints
 -------------
 
-*   `POST http://localhost:8080/api/business/register`: Register a new business.
-*   `POST http://localhost:8080/api/accounts/create`: Create a new account.
-*   `POST http://localhost:8080/api/accounts/transaction`: Process a deposit or withdrawal transaction.
-*   `POST http://localhost:8080/api/accounts/transfer`: Create a transfer between accounts.
-*   `GET http://localhost:8080/api/accounts/balance/{accountId}`: Get the balance of an account.
+*   `POST /api/business/register`: Register a new business.
+*   `POST /api/accounts/create`: Create a new account.
+*   `POST /api/accounts/transaction`: Process a deposit or withdrawal transaction.
+*   `POST /api/accounts/transfer`: Transfer funds between accounts.
+*   `GET /api/accounts/balance/{accountId}`: Retrieve account balance information.
 
-Running the Project
--------------------
+Running the Project with Docker
+-------------------------------
 
 ### Prerequisites
 
-*   Java 11 or higher
-*   Maven
-*   Spring Boot
-*   MySQL
+*   Docker
 
-### Setup
+### Setup Instructions
 
-1.  Clone the repository:
+1.  **Clone the repository:**
     
         git clone https://github.com/shivamverma-01/RevPay.git
+        cd RevPay
+                    
     
-2.  Navigate to the project directory:
+2.  **Start the application with Docker Compose:**
     
-        cd revpay
+        docker-compose up --build
     
-3.  Build the project:
+    This command will:
     
-        mvn clean install
+    *   Set up a MySQL container for the database.
+    *   Launch the Spring Boot backend service.
     
-4.  Run the application:
+    The application will be accessible at `http://localhost:8080`.
     
-        mvn spring-boot:run
-    
+3.  **Verify API Endpoints:** Use Postman or curl to make requests to the endpoints listed above.
 
-Configuration
--------------
+Complete Project Details
+------------------------
 
-Update `application.properties` in `src/main/resources` for custom configuration.
+For additional project details, visit the complete repository [here](https://github.com/shivamverma-01/RevPay/tree/main).
+
+Contact
+-------
+
+For further questions, please feel free to contact **Shivam Verma** at [verma.shivam2605@gmail.com](mailto:verma.shivam2605@gmail.com).
